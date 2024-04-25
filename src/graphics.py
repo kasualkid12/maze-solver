@@ -40,11 +40,11 @@ class Point:
 
 
 class Line:
-  def __init__(self, point1, point2) -> None:
-    self.point1 = point1
-    self.point2 = point2
+  def __init__(self, p1, p2) -> None:
+    self.p1 = p1
+    self.p2 = p2
 
   def draw(self, canvas, fill_color="black"):
     canvas.create_line(
-    self.point1.x, self.point1.y, self.point2.x, self.point2.y, fill=fill_color, width=2
+    self.p1.x, self.p1.y, self.p2.x, self.p2.y, fill=fill_color, width=2
 )
