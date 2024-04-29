@@ -27,7 +27,6 @@ class Window:
     print("window closed...")
   
   def draw_line(self, line, fill_color="black"):
-    print(f"Drawing line from ({line.p1.x}, {line.p1.y}) to ({line.p2.x}, {line.p2.y}) with color {fill_color}")
     line.draw(self.canvas, fill_color)
 
   def close(self):

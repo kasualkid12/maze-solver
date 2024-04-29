@@ -27,18 +27,15 @@ class Maze:
         column.append(cell)
       self._cells.append(column)
     self._break_entrance_and_exit()
+    self._break_walls_r(0, 0)
+    self._reset_cells_visited()
 
   def _generate_maze(self):   
-    print('Breaking walls of cells') 
-    self._break_walls_r(0, 0)
-    print('Walls broken')
     for i in range(self._num_cols):
       for j in range(self._num_rows):
-        print(f'[{i}][{j}]')
         self._draw_cell(i, j)
 
   def _draw_cell(self, i, j):
-    print(f"drawing cell at [{i}][{j}]")
     if self._win is None:
       return
     x1 = self._x1 + i * self._cell_size_x
@@ -83,14 +80,12 @@ class Maze:
       # if there is nowhere to go from here
       # just break out
       if len(next_index_list) == 0:
-        # print(f"No more moves from cell ({i}, {j})")
         self._draw_cell(i, j)
         return
 
       # randomly choose the next direction to go
       direction_index = random.randrange(len(next_index_list))
       next_index = next_index_list[direction_index]
-      # print(f"Moving from cell ({i}, {j}) to cell {next_index}")
 
       # knock out walls between this cell and the next cell(s)
       # right
@@ -112,3 +107,8 @@ class Maze:
 
       # recursively visit the next cell
       self._break_walls_r(next_index[0], next_index[1])
+
+  def _reset_cells_visited(self):
+    for i in range(self._num_cols):
+      for j in range(self._num_rows):
+        self._cells[i][j].visited = False
