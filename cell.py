@@ -6,6 +6,7 @@ class Cell:
         self.has_right_wall = True
         self.has_top_wall = True
         self.has_bottom_wall = True
+        self.visited = False
         self._x1 = None
         self._x2 = None
         self._y1 = None
@@ -15,6 +16,7 @@ class Cell:
     def draw(self, x1, y1, x2, y2):
         if self._win is None:
             return
+        print(f"Drawing walls for cell at ({x1}, {y1}) to ({x2}, {y2})")
         self._x1 = x1
         self._x2 = x2
         self._y1 = y1
