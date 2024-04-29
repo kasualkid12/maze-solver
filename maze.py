@@ -16,6 +16,7 @@ class Maze:
     else: 
       self._seed = seed
     self._cells = []
+    print('Generating Maze')
     self._create_cells()
     self._generate_maze()
 
@@ -112,3 +113,54 @@ class Maze:
     for i in range(self._num_cols):
       for j in range(self._num_rows):
         self._cells[i][j].visited = False
+
+  def solve(self):
+    result = self._solve_r(0, 0)
+    return result
+  
+  def _solve_r(self, i, j):
+    # Call animation to visualize the exploration
+    self._animate()
+    
+    # Mark this cell as visited
+    self._cells[i][j].visited = True
+    
+    # Check if we have reached the end of the maze
+    if i == self._num_cols - 1 and j == self._num_rows - 1:
+        return True
+    
+    # Directions we can move: (x_increment, y_increment)
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # left, right, up, down
+    for x_inc, y_inc in directions:
+      ni, nj = i + x_inc, j + y_inc
+        
+      # Check bounds and if the next cell can be visited
+      if 0 <= ni < self._num_cols and 0 <= nj < self._num_rows and not self._cells[ni][nj].visited:
+        # Check if there is no wall between the current cell and the next cell
+        if self.can_move(i, j, ni, nj):
+          # Draw the move
+          self._cells[i][j].draw_move(self._cells[ni][nj])
+                
+          # Recursive call to solve the maze from the next cell
+          if self._solve_r(ni, nj):
+            return True
+                
+          # If not solved, undo the move
+          self._cells[i][j].draw_move(self._cells[ni][nj], undo=True)
+    
+    # If no direction worked, return False
+    return False
+  
+  def can_move(self, current_i, current_j, next_i, next_j):
+    # Determine the movement direction
+    if next_i == current_i - 1:  # Moving left
+      return not self._cells[current_i][current_j].has_left_wall and not self._cells[next_i][next_j].has_right_wall
+    if next_i == current_i + 1:  # Moving right
+      return not self._cells[current_i][current_j].has_right_wall and not self._cells[next_i][next_j].has_left_wall
+    if next_j == current_j - 1:  # Moving up
+      return not self._cells[current_i][current_j].has_top_wall and not self._cells[next_i][next_j].has_bottom_wall
+    if next_j == current_j + 1:  # Moving down
+      return not self._cells[current_i][current_j].has_bottom_wall and not self._cells[next_i][next_j].has_top_wall
+
+    # Default case if no valid direction is found
+    return False
